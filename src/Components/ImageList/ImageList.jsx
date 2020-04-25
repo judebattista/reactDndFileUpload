@@ -1,10 +1,47 @@
-import React from 'react';
+import React, {useRef}  from 'react';
+import { useDrag, useDrop} from 'react-dnd';
 import './ImageList.css';
 
+// Need to pass which type of element can be draggable
+// It's a simple string or Symbol. This is like a unique ID so 
+// the library knows what type of element is dragged or dropped on
+const type = 'Image'; 
+
 //Rendering individual images
-const Image = ({ image }) => {
+const Image = ({ image, index }) => {
+    // Initialize the reference
+    const ref = useRef(null);
+    // useDrop hook is responsible for handling whether any item gets hovered
+    // or dropped on the element
+    const[, drop] = useDrop({
+        // Accept will make sure only these element types can be droppable on this element
+        accept: type,
+        hover(item) {
+            
+        }
+    });
+
+    const [{isDragging}, drag] = useDrag({
+        // item denotes the element type, unique identifier (id) and the index (position in List)
+        item: {type, id: image.id, index},
+        // collect method is like an event listener. It monitors whether the element is 
+        // being dragged and exposes that information
+        collect: monitor => ({
+            isDragging: monitor.isDragging()
+        })
+    });
+
+    // Initialize drag and drop into the element using its reference
+    // Here we initialize both drag and drop on the same element, an Image
+    drag(drop(ref));
+    // can we do the following:
+    // drag(ref)
+    // drop(ref)
+
     return (
-        <div className='file-item'>
+        <div className='file-item' 
+            ref={ref} 
+            style={{opacity: isDragging ? 0 : 1}}>
             <img alt={`img - ${image.id}`} src={image.src} className='file-img' />
         </div>
     );

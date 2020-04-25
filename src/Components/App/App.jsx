@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import Dropzone from '../Dropzone/Dropzone';
 import ImageList from '../ImageList/ImageList';
+import {DndProvider} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import './App.css';
 import cuid from 'cuid'; //Simple library to generate unique IDs
 
@@ -33,7 +35,9 @@ function App() {
         <main className='App'>
             <h1 className='text-center'>Drag and Drop Example</h1>
             <Dropzone onDrop={onDrop} accept={'image/*'}/>
-            <ImageList images={images} />
+            <DndProvider backend={HTML5Backend}>
+                <ImageList images={images} /*onUpdate={moveImage}*/ />
+            </DndProvider>
         </main>
     );
 
