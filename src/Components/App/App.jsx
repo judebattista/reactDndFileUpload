@@ -3,7 +3,7 @@ import Dropzone from '../Dropzone/Dropzone';
 import './App.css';
 
 function App() {
-    const onDrop = useCallback(aceptedFiles => {
+    const onDrop = useCallback(acceptedFiles => {
         console.log(acceptedFiles);
     }, []);
 
