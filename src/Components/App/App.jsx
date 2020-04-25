@@ -5,11 +5,27 @@ import {DndProvider} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import './App.css';
 import cuid from 'cuid'; //Simple library to generate unique IDs
+import update from 'immutability-helper';
 
 function App() {
     // State called images using useState hooks and pass the initial 
     // value as an empty array
     const [images, setImages] = useState([]);
+
+    const moveImage = (dragIndex, hoverIndex) => {
+        //Get the dragged element
+        const draggedImage = images[dragIndex];
+        /*
+            -copy the dragged image before hovered element (i.e., [hoverIndex, 0, draggedImage])
+            -remove the previous reference of dragged element (i.e., [dragIndex, 1])
+            -here we are using this update helper method from immutability-helper package
+        */
+       setImages(
+           update(images, {
+               $splice: [[dragIndex, 1], [hoverIndex, 0, draggedImage]]
+           })
+       );
+    };
     
     const onDrop = useCallback(acceptedFiles => {
         // Loop through accepted files
@@ -36,7 +52,7 @@ function App() {
             <h1 className='text-center'>Drag and Drop Example</h1>
             <Dropzone onDrop={onDrop} accept={'image/*'}/>
             <DndProvider backend={HTML5Backend}>
-                <ImageList images={images} /*onUpdate={moveImage}*/ />
+                <ImageList images={images} moveImage={moveImage} />
             </DndProvider>
         </main>
     );

@@ -8,7 +8,7 @@ import './ImageList.css';
 const type = 'Image'; 
 
 //Rendering individual images
-const Image = ({ image, index }) => {
+const Image = ({ image, index, moveImage }) => {
     // Initialize the reference
     const ref = useRef(null);
     // useDrop hook is responsible for handling whether any item gets hovered
@@ -17,7 +17,21 @@ const Image = ({ image, index }) => {
         // Accept will make sure only these element types can be droppable on this element
         accept: type,
         hover(item) {
-            
+            if(!ref.current) {
+                return;
+            }
+            const dragIndex = item.index;
+            //current element where the dragged element is hovered on
+            const hoverIndex = index;
+            //If the dragged element is hovered in the same place, then do nothing
+            if (dragIndex === hoverIndex) {
+                return;
+            }
+            //If it is dragged around other elements, then move the image and set the state with position changes
+            moveImage(dragIndex, hoverIndex);
+            /*Update the index for dragged item directly to avoid flickering 
+            when the image is half dragged into the next*/
+            item.index=hoverIndex;            
         }
     });
 
