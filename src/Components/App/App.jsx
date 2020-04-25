@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Dropzone from '../Dropzone/Dropzone';
+import ImageList from '../ImageList/ImageList';
 import './App.css';
 import cuid from 'cuid'; //Simple library to generate unique IDs
 
@@ -32,8 +33,11 @@ function App() {
         <main className='App'>
             <h1 className='text-center'>Drag and Drop Example</h1>
             <Dropzone onDrop={onDrop} accept={'image/*'}/>
+            <ImageList images={images} />
         </main>
     );
+
+
 }
 
 export default App;
