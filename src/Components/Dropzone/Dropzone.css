@@ -1,0 +1,15 @@
+.dropzone-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+.dropzone-contents {
+    border: .5 em;
+    border-color: darkturquoise;
+    border-style: dashed;
+    width: 75%;
+
+}

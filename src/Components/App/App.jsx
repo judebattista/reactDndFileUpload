@@ -1,10 +1,31 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Dropzone from '../Dropzone/Dropzone';
 import './App.css';
+import cuid from 'cuid'; //Simple library to generate unique IDs
 
 function App() {
+    // State called images using useState hooks and pass the initial 
+    // value as an empty array
+    const [images, setImages] = useState([]);
+    
     const onDrop = useCallback(acceptedFiles => {
-        console.log(acceptedFiles);
+        // Loop through accepted files
+        acceptedFiles.map( file => {
+            // Initialize FileReader browser API
+            const reader = new FileReader();
+            // onload callback gets called after the reader reads the file data.
+            reader.onload = function(e) {
+                // Add the image into the state. Since FileReader reading process is async, it's
+                // better to get the latest snapshot state (i.e. prevState) and update it.
+                setImages(prevState => [
+                    ...prevState,
+                    {id: cuid(), src: e.target.result}
+                ]);
+            };
+            reader.readAsDataURL(file);
+            return file;
+        });
+        //console.log(acceptedFiles);
     }, []);
 
     return (
