@@ -3,9 +3,19 @@ import Dropzone from '../Dropzone/Dropzone';
 import ImageList from '../ImageList/ImageList';
 import {DndProvider} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import TouchBackend from 'react-dnd-touch-backend';
 import './App.css';
 import cuid from 'cuid'; //Simple library to generate unique IDs
 import update from 'immutability-helper';
+
+// Test to see whether the device supports touch
+const isTouchDevice = () => {
+    const touch = ("ontouchstart" in window) ? true: false;
+    return touch; 
+}
+
+// Assign backend based on touch capability. Wanted to use your mouse on a touch-enabled device? Too bad!
+const backendForDnd = isTouchDevice() ? TouchBackend: HTML5Backend;
 
 function App() {
     // State called images using useState hooks and pass the initial 
@@ -51,7 +61,7 @@ function App() {
         <main className='App'>
             <h1 className='text-center'>Drag and Drop Example</h1>
             <Dropzone onDrop={onDrop} accept={'image/*'}/>
-            <DndProvider backend={HTML5Backend}>
+            <DndProvider backend={backendForDnd}>
                 <ImageList images={images} moveImage={moveImage} />
             </DndProvider>
         </main>
